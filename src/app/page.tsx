@@ -1,3 +1,4 @@
+import { ModeToggle } from "@/components/Theme-toggle";
 import Image from "next/image";
 
 export default function Home() {
@@ -97,6 +98,9 @@ export default function Home() {
           />
           Go to nextjs.org →
         </a>
+        <div>
+          <ModeToggle />
+        </div>
       </footer>
     </div>
   );

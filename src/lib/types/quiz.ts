@@ -6,4 +6,4 @@ export interface IQuiz {
         optionContent: string;
     }[];
     correctOption: string;
-}[]
+}

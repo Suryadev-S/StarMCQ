@@ -2,10 +2,11 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { useQuiz } from "@/lib/quiz/quiz-context";
-import { quizzes } from "@/lib/quiz/quiz-store";
+import { setActiveQuestionIndex, setScore, setSelectedOptions } from "@/lib/redux/quiz/quiz-slice";
+import { RootState } from "@/lib/redux/store";
 import { IQuiz } from "@/lib/types/quiz";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
 
 
 const NoActiveQuestionComponent = () => {
@@ -17,13 +18,12 @@ const NoActiveQuestionComponent = () => {
 }
 
 const ActiveQuestionComponent = ({ a_question }: { a_question: IQuiz }) => {
-    const { setActiveQuestionIndex, setScore } = useQuiz()
+    const { selectedOptions } = useSelector((state: RootState) => state.quizReducer);
+    const dispatch = useDispatch();
     return (
         <div className="flex justify-around items-center h-full">
             <div>
-                <Button size={'icon'} onClick={() => {
-                    setActiveQuestionIndex((prev) => (prev as number - 1 + quizzes.length) % quizzes.length)
-                }}>
+                <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('prev'))}>
                     <ArrowLeftIcon />
                 </Button>
             </div>
@@ -34,11 +34,14 @@ const ActiveQuestionComponent = ({ a_question }: { a_question: IQuiz }) => {
                 </p>
                 <br />
                 <br />
-                <RadioGroup onValueChange={(val) => {
-                    if (val === a_question.correctOption) {
-                        setScore((prev) => prev + 1);
-                    }
-                }}>
+                <RadioGroup
+                    value={selectedOptions[a_question.quizId] || null}
+                    onValueChange={(val) => {
+                        dispatch(setSelectedOptions({ [a_question.quizId]: val }));
+                        if (val === a_question.correctOption) {
+                            dispatch(setScore(1));
+                        }
+                    }}>
                     {a_question.options.map((op, i) => (
                         <div className="flex items-center space-x-2" key={i}>
                             <RadioGroupItem value={op.optionId} id={op.optionId} />
@@ -49,9 +52,7 @@ const ActiveQuestionComponent = ({ a_question }: { a_question: IQuiz }) => {
             </div>
 
             <div>
-                <Button size={'icon'} onClick={() => {
-                    setActiveQuestionIndex((prev) => (prev as number + 1) % quizzes.length)
-                }}>
+                <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('next'))}>
                     <ArrowRightIcon />
                 </Button>
             </div>
@@ -60,12 +61,12 @@ const ActiveQuestionComponent = ({ a_question }: { a_question: IQuiz }) => {
 }
 
 const QuizPage = () => {
-    const { activeQuestionIndex } = useQuiz()
+    const { quiz, activeQuestionIndex } = useSelector((state: RootState) => state.quizReducer)
     return (
         <>
             {
-                activeQuestionIndex != null ?
-                    <ActiveQuestionComponent a_question={quizzes[activeQuestionIndex]} /> :
+                activeQuestionIndex != null && quiz != null ?
+                    <ActiveQuestionComponent a_question={quiz[activeQuestionIndex]} key={activeQuestionIndex} /> :
                     <NoActiveQuestionComponent />
             }
         </>

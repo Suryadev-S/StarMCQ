@@ -2,10 +2,12 @@
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { setActiveQuestionIndex, setScore, setSelectedOptions } from "@/lib/redux/quiz/quiz-slice";
-import { RootState } from "@/lib/redux/store";
-import { IQuiz } from "@/lib/types/quiz";
+import { selectionEvent, setActiveQuestionIndex, setScore, setSelectedOptions } from "@/lib/redux/quiz/quiz-slice";
+import store, { RootState } from "@/lib/redux/store";
+import { IQuestion, testMode } from "@/lib/types/quiz";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -17,9 +19,14 @@ const NoActiveQuestionComponent = () => {
     )
 }
 
-const ActiveQuestionComponent = ({ a_question }: { a_question: IQuiz }) => {
+const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, mode: testMode }) => {
     const { selectedOptions } = useSelector((state: RootState) => state.quizReducer);
+    const router = useRouter();
     const dispatch = useDispatch();
+
+    const modeDisableMap: Record<string, boolean> = {
+        'competitive': selectedOptions[a_question.questionId] ? true : false,
+    }
     return (
         <div className="flex justify-around items-center h-full">
             <div>
@@ -35,13 +42,16 @@ const ActiveQuestionComponent = ({ a_question }: { a_question: IQuiz }) => {
                 <br />
                 <br />
                 <RadioGroup
-                    value={selectedOptions[a_question.quizId] || null}
+                    value={selectedOptions[a_question.questionId] || null}
                     onValueChange={(val) => {
-                        dispatch(setSelectedOptions({ [a_question.quizId]: val }));
-                        if (val === a_question.correctOption) {
-                            dispatch(setScore(1));
+                        dispatch(selectionEvent({ q: a_question, oId: val }))
+                        // check immediately
+                        if (store.getState().quizReducer.isFinished) {
+                            router.push("/quiz/results");
                         }
-                    }}>
+                    }}
+                    disabled={modeDisableMap[mode]}
+                >
                     {a_question.options.map((op, i) => (
                         <div className="flex items-center space-x-2" key={i}>
                             <RadioGroupItem value={op.optionId} id={op.optionId} />
@@ -61,12 +71,16 @@ const ActiveQuestionComponent = ({ a_question }: { a_question: IQuiz }) => {
 }
 
 const QuizPage = () => {
-    const { quiz, activeQuestionIndex } = useSelector((state: RootState) => state.quizReducer)
+    const { test, activeQuestionIndex } = useSelector((state: RootState) => state.quizReducer);
     return (
         <>
             {
-                activeQuestionIndex != null && quiz != null ?
-                    <ActiveQuestionComponent a_question={quiz[activeQuestionIndex]} key={activeQuestionIndex} /> :
+                activeQuestionIndex != null && test != null ?
+                    <ActiveQuestionComponent
+                        a_question={test.questions[activeQuestionIndex]}
+                        key={activeQuestionIndex}
+                        mode={test.meta.mode}
+                    /> :
                     <NoActiveQuestionComponent />
             }
         </>

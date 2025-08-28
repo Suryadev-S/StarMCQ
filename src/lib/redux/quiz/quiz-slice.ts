@@ -1,18 +1,13 @@
-import { IQuiz } from "@/lib/types/quiz";
+import { IQuestion, ITest, QuizState } from "@/lib/types/quiz";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-type QuizState = {
-    quiz: IQuiz[] | null,
-    activeQuestionIndex: number | null,
-    score: number,
-    selectedOptions: Record<string, string>,
-}
-
 const initialState: QuizState = {
-    quiz: null,
+    test: null,
     activeQuestionIndex: null,
     score: 0,
     selectedOptions: {},
+    isFinished: false,
+    remainingTime: 0,
 }
 
 
@@ -20,12 +15,18 @@ export const quizSlice = createSlice({
     name: 'quiz',
     initialState,
     reducers: {
-        setQuiz: (state, action: PayloadAction<IQuiz[]>) => {
-            state.quiz = action.payload;
+        setQuiz: (state, action: PayloadAction<ITest>) => {
+            state.test = action.payload;
+        },
+        setRemTime: (state, action: PayloadAction<number>) => {
+            state.remainingTime = action.payload;
+        },
+        setFinished: (state, action: PayloadAction<boolean>) => {
+            state.isFinished = action.payload
         },
         setActiveQuestionIndex: (state, action: PayloadAction<'next' | 'prev' | number | null>) => {
-            if (state.quiz) {
-                const length = state.quiz.length;
+            if (state.test) {
+                const length = state.test.questions.length;
                 if (typeof action.payload == 'number') {
                     state.activeQuestionIndex = action.payload
                 }
@@ -40,10 +41,35 @@ export const quizSlice = createSlice({
                 }
             }
         },
-        setScore: (state, action: PayloadAction<number>) => {
+        setScore: (state, action: PayloadAction<number>) => { //not in use
             state.score += action.payload
         },
-        setSelectedOptions: (state, action: PayloadAction<Record<string, string>>) => {
+        selectionEvent: (state, action: PayloadAction<{ q: IQuestion, oId: string }>) => {
+            const { q: currQuestion, oId: userSelectedOption } = action.payload;
+            const isPresent = state.selectedOptions[currQuestion.questionId];
+
+            //add the current question to the response entry
+            state.selectedOptions[currQuestion.questionId] = userSelectedOption;
+
+            if (state.test && state.test.meta.mode == 'competitive') {
+                if (!isPresent) {
+                    if (currQuestion.correctOption == userSelectedOption) {
+                        state.score += currQuestion.points;
+                    }
+                }
+                // move to next question
+                if (typeof state.activeQuestionIndex === 'number') {
+                    state.activeQuestionIndex = (state.activeQuestionIndex + 1) % state.test.meta.totalQuestions;
+                }
+
+                // check if finished or not
+                if (Object.keys(state.selectedOptions).length == state.test.meta.totalQuestions) {
+                    state.isFinished = true;
+                    state.activeQuestionIndex = null;
+                }
+            }
+        },
+        setSelectedOptions: (state, action: PayloadAction<Record<string, string>>) => { //not in uses
             state.selectedOptions = { ...state.selectedOptions, ...action.payload }
         },
     }
@@ -54,6 +80,9 @@ export const {
     setActiveQuestionIndex,
     setScore,
     setSelectedOptions,
+    selectionEvent,
+    setRemTime,
+    setFinished
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

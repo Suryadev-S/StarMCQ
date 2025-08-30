@@ -1,10 +1,10 @@
-import QuizScore from "@/components/quiz/Quiz-score";
 import QuizSidebar from "@/components/quiz/Quiz-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import QuizSetter from "@/lib/quiz/quiz-setter";
 import { ReactNode } from "react";
 import localFont from 'next/font/local'
 import QuizTimer from "@/components/quiz/Quiz-timer";
+import QuizQuitButton from "@/components/quiz/Quiz-quit-button";
 
 
 const dseg = localFont({
@@ -26,6 +26,9 @@ const QuizPageLayout = ({ children }: { children: ReactNode }) => {
                                 <SidebarTrigger />
                                 <div>
                                     <QuizTimer />
+                                </div>
+                                <div>
+                                    <QuizQuitButton />
                                 </div>
                             </div>
                             <div>

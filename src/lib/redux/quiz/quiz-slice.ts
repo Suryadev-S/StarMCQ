@@ -8,6 +8,7 @@ const initialState: QuizState = {
     selectedOptions: {},
     isFinished: false,
     remainingTime: 0,
+    isRunning: false,
 }
 
 
@@ -23,6 +24,9 @@ export const quizSlice = createSlice({
         },
         setFinished: (state, action: PayloadAction<boolean>) => {
             state.isFinished = action.payload
+        },
+        setIsRunning: (state, action: PayloadAction<boolean>) => {
+            state.isRunning = action.payload;
         },
         setActiveQuestionIndex: (state, action: PayloadAction<'next' | 'prev' | number | null>) => {
             if (state.test) {
@@ -66,6 +70,7 @@ export const quizSlice = createSlice({
                 if (Object.keys(state.selectedOptions).length == state.test.meta.totalQuestions) {
                     state.isFinished = true;
                     state.activeQuestionIndex = null;
+                    state.isRunning = false;
                 }
             }
         },
@@ -82,7 +87,8 @@ export const {
     setSelectedOptions,
     selectionEvent,
     setRemTime,
-    setFinished
+    setFinished,
+    setIsRunning
 } = quizSlice.actions;
 
 export default quizSlice.reducer;

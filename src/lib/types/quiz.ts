@@ -15,6 +15,7 @@ export type QuizState = {
     score: number,
     selectedOptions: Record<string, string>,
     isFinished: boolean,
+    isRunning: boolean,
     remainingTime: number,
 }
 

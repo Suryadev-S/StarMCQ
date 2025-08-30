@@ -1,6 +1,6 @@
 'use client'
 
-import { setFinished, setRemTime } from "@/lib/redux/quiz/quiz-slice";
+import { setActiveQuestionIndex, setFinished, setRemTime } from "@/lib/redux/quiz/quiz-slice";
 import { RootState } from "@/lib/redux/store";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -16,11 +16,11 @@ interface QTProps {
 const Timer = ({ rem_Time, onTimeOut }: QTProps) => {
     const dispatch = useDispatch();
     const [time, setTime] = useState(rem_Time);
-    const { isFinished } = useSelector((store: RootState) => store.quizReducer);
+    const { isFinished, isRunning } = useSelector((store: RootState) => store.quizReducer);
 
     useEffect(() => {
         let intervalId: NodeJS.Timeout;
-        if (!isFinished) {
+        if (isRunning && !isFinished) {
             intervalId = setInterval(() => {
                 setTime((prev) => Math.max(prev - 1, 0));  // Safer decrement
             }, 1000);
@@ -29,7 +29,7 @@ const Timer = ({ rem_Time, onTimeOut }: QTProps) => {
         }
 
         return () => clearInterval(intervalId);
-    }, [isFinished]);
+    }, [isFinished, isRunning]);
 
     useEffect(() => {
         if (time === 0 && !isFinished) {
@@ -50,6 +50,7 @@ const QuizTimer = () => {
     const { test } = useSelector((state: RootState) => state.quizReducer);
     const handleTimeOut = () => {
         dispatch(setFinished(true));
+        dispatch(setActiveQuestionIndex(null));
         router.push('/quiz/results');
     }
     return (

@@ -15,6 +15,7 @@ const NoActiveQuestionComponent = () => {
     return (
         <div>
             <p>Go ahead and select a question</p>
+            <p>Some general Instructions can be here as well</p>
         </div>
     )
 }

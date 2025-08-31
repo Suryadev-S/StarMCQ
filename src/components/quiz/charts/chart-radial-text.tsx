@@ -28,6 +28,20 @@ type ScoreRadialProps = {
     description?: string
 }
 
+// const chartData = [
+//     { browser: "safari", visitors: 600, fill: "var(--color-safari)" },
+// ]
+
+// const chartConfig = {
+//     visitors: {
+//         label: "Visitors",
+//     },
+//     safari: {
+//         label: "Safari",
+//         color: "var(--chart-2)",
+//     },
+// } satisfies ChartConfig
+
 export function ChartRadialText({
     score,
     maximumMarks,

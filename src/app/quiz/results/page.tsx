@@ -1,6 +1,5 @@
 'use client'
-
-import { ScoreRadialText } from "@/components/quiz/charts/Quiz-score-radial-text";
+import { ChartRadialText } from "@/components/quiz/charts/Quiz-score-radial-text";
 import { TimeAnalysis } from "@/components/quiz/charts/Quiz-time-analysis";
 import { RootState } from "@/lib/redux/store";
 import { useSelector } from "react-redux";
@@ -23,11 +22,11 @@ const ResultsPage = () => {
                 <p className="text-sm text-muted-foreground">A quick breakdown of your performance with visual analytics.</p>
             </header>
             <section>
-                <ScoreRadialText score={score} maximumMarks={maxMarks} />
+                <ChartRadialText score={score} maximumMarks={maxMarks} />
             </section>
-            <section>
+            {/* <section>
                 <TimeAnalysis timeUsedSec={timeTook} totalDurationSec={quizDuration} />
-            </section>
+            </section> */}
         </div>
     );
 };

@@ -22,7 +22,7 @@ const QuizPageLayout = ({ children }: { children: ReactNode }) => {
                             <QuizSidebar />
                         </div>
                         <main className="grid grid-rows-[auto_1fr]">
-                            <div className="bg-sidebar flex gap-2 items-center py-2.5 px-4 border-b">
+                            <header data-name="quiz-header" className="bg-sidebar flex gap-2 items-center py-2.5 px-4 border-b sticky top-0">
                                 <SidebarTrigger />
                                 <div>
                                     <QuizTimer />
@@ -30,7 +30,7 @@ const QuizPageLayout = ({ children }: { children: ReactNode }) => {
                                 <div>
                                     <QuizQuitButton />
                                 </div>
-                            </div>
+                            </header>
                             <div>
                                 {children}
                             </div>

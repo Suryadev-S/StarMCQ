@@ -4,7 +4,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { selectionEvent, setActiveQuestionIndex, setScore, setSelectedOptions } from "@/lib/redux/quiz/quiz-slice";
 import store, { RootState } from "@/lib/redux/store";
-import { IQuestion, testMode } from "@/lib/types/quiz";
+import { IQuestion, ITest, testMode } from "@/lib/types/quiz";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
@@ -30,11 +30,14 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
     }
     return (
         <div className="flex justify-around items-center h-full">
-            <div>
-                <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('prev'))}>
-                    <ArrowLeftIcon />
-                </Button>
-            </div>
+            {
+                mode != "competitive" &&
+                <div>
+                    <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('prev'))}>
+                        <ArrowLeftIcon />
+                    </Button>
+                </div>
+            }
 
             <div data-name="quiz-box" className="border border-secondary rounded-md px-6 py-8 w-140 min-h-120 max-h-160 overflow-auto text-sm leading-relaxed">
                 <p>
@@ -62,11 +65,29 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
                 </RadioGroup>
             </div>
 
-            <div>
-                <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('next'))}>
-                    <ArrowRightIcon />
-                </Button>
-            </div>
+            {
+                mode == "competitive" &&
+                <div>
+                    <Button variant={'secondary'} size={'sm'} onClick={() => {
+                        dispatch(selectionEvent({ q: a_question, oId: null }))
+                        // check immediately
+                        if (store.getState().quizReducer.isFinished) {
+                            router.push("/quiz/results");
+                        }
+                    }}>
+                        <span>skip</span>
+                    </Button>
+                </div>
+            }
+            
+            {
+                mode != 'competitive' &&
+                <div>
+                    <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('next'))}>
+                        <ArrowRightIcon />
+                    </Button>
+                </div>
+            }
         </div>
     )
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { setActiveQuestionIndex, setFinished, setRemTime } from "@/lib/redux/quiz/quiz-slice";
+import { setActiveQuestionIndex, setFinished, setIsRunning, setRemTime } from "@/lib/redux/quiz/quiz-slice";
 import { RootState } from "@/lib/redux/store";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -50,6 +50,7 @@ const QuizTimer = () => {
     const { test } = useSelector((state: RootState) => state.quizReducer);
     const handleTimeOut = () => {
         dispatch(setFinished(true));
+        dispatch(setIsRunning(false));
         dispatch(setActiveQuestionIndex(null));
         router.push('/quiz/results');
     }

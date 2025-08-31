@@ -48,7 +48,7 @@ export const quizSlice = createSlice({
         setScore: (state, action: PayloadAction<number>) => { //not in use
             state.score += action.payload
         },
-        selectionEvent: (state, action: PayloadAction<{ q: IQuestion, oId: string }>) => {
+        selectionEvent: (state, action: PayloadAction<{ q: IQuestion, oId: string | null }>) => {
             const { q: currQuestion, oId: userSelectedOption } = action.payload;
             const isPresent = state.selectedOptions[currQuestion.questionId];
 

@@ -13,7 +13,7 @@ export type QuizState = {
     test: ITest | null,
     activeQuestionIndex: number | null,
     score: number,
-    selectedOptions: Record<string, string>,
+    selectedOptions: Record<string, string | null>,
     isFinished: boolean,
     isRunning: boolean,
     remainingTime: number,

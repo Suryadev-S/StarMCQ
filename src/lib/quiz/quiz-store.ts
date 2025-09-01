@@ -3,7 +3,7 @@ import { ITest } from "../types/quiz";
 const testSchema: ITest = {
     id: 'quiz123',
     meta: {
-        mode: 'competitive',
+        mode: 'exam',
         title: 'Come lets test your knowledge',
         durationInSeconds: 80,
         totalQuestions: 10,

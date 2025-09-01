@@ -53,6 +53,7 @@ export const quizSlice = createSlice({
             const isPresent = state.selectedOptions[currQuestion.questionId];
 
             //add the current question to the response entry
+            // this action is common for competitive, exam and playground mode.
             state.selectedOptions[currQuestion.questionId] = userSelectedOption;
 
             if (state.test && state.test.meta.mode == 'competitive') {

@@ -5,6 +5,8 @@ import { ReactNode } from "react";
 import localFont from 'next/font/local'
 import QuizTimer from "@/components/quiz/Quiz-timer";
 import QuizQuitButton from "@/components/quiz/Quiz-quit-button";
+import QuizSubmitButton from "@/components/quiz/Quiz-submit-button";
+import { Button } from "@/components/ui/button";
 
 
 const dseg = localFont({
@@ -28,7 +30,11 @@ const QuizPageLayout = ({ children }: { children: ReactNode }) => {
                                     <QuizTimer />
                                 </div> */}
                                 <div>
-                                    <QuizQuitButton />
+                                    <QuizSubmitButton>
+                                        <Button size={'sm'}>
+                                            submit
+                                        </Button>
+                                    </QuizSubmitButton>
                                 </div>
                             </header>
                             <div>

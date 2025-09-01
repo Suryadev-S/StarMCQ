@@ -49,8 +49,8 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
                     value={selectedOptions[a_question.questionId] || null}
                     onValueChange={(val) => {
                         dispatch(selectionEvent({ q: a_question, oId: val }))
-                        // check immediately
-                        if (store.getState().quizReducer.isFinished) {
+                        // check immediately, for competitve
+                        if (mode == 'competitive' && store.getState().quizReducer.isFinished) {
                             router.push("/quiz/results");
                         }
                     }}
@@ -79,7 +79,7 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
                     </Button>
                 </div>
             }
-            
+
             {
                 mode != 'competitive' &&
                 <div>

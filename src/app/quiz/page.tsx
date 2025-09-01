@@ -1,4 +1,5 @@
 'use client'
+import QuizExplanationElement from "@/components/quiz/Quiz-explanation";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
@@ -7,7 +8,6 @@ import store, { RootState } from "@/lib/redux/store";
 import { IQuestion, ITest, testMode } from "@/lib/types/quiz";
 import { ArrowLeftIcon, ArrowRightIcon } from "lucide-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 
@@ -21,7 +21,7 @@ const NoActiveQuestionComponent = () => {
 }
 
 const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, mode: testMode }) => {
-    const { selectedOptions } = useSelector((state: RootState) => state.quizReducer);
+    const { selectedOptions, isFinished, isRunning } = useSelector((state: RootState) => state.quizReducer);
     const router = useRouter();
     const dispatch = useDispatch();
 
@@ -31,7 +31,7 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
     return (
         <div className="flex justify-around items-center h-full">
             {
-                mode != "competitive" &&
+                (mode == "competitive" && isFinished) &&
                 <div>
                     <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('prev'))}>
                         <ArrowLeftIcon />
@@ -39,11 +39,26 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
                 </div>
             }
 
+            {/* QUIZ BOX/CONTAINER, box with
+            question and options */}
             <div data-name="quiz-box" className="border border-secondary rounded-md px-6 py-8 w-140 min-h-120 max-h-160 overflow-auto text-sm leading-relaxed">
                 <p>
                     {a_question.question}
                 </p>
                 <br />
+                {
+                    // EXPLANATION ELEMENT
+                    (mode == 'playground' || (mode == 'competitive' && isFinished)) &&
+                    (a_question.explanation ?
+                        (
+                            <QuizExplanationElement content={a_question.explanation}>
+                                <Button className="mb-4" disabled={selectedOptions[a_question.questionId as string] ? true : false}>view explanation</Button>
+                            </QuizExplanationElement>
+                        ) :
+                        (
+                            <div className="text-sm">No explanation provided</div>
+                        ))
+                }
                 <br />
                 <RadioGroup
                     value={selectedOptions[a_question.questionId] || null}
@@ -66,7 +81,8 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
             </div>
 
             {
-                mode == "competitive" &&
+                // SKIP BUTTON, for competitive
+                (mode == "competitive" && isRunning) &&
                 <div>
                     <Button variant={'secondary'} size={'sm'} onClick={() => {
                         dispatch(selectionEvent({ q: a_question, oId: null }))
@@ -81,7 +97,7 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
             }
 
             {
-                mode != 'competitive' &&
+                (mode == "competitive" && isFinished) &&
                 <div>
                     <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('next'))}>
                         <ArrowRightIcon />

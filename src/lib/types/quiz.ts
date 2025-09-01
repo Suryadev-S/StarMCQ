@@ -6,7 +6,8 @@ export interface IQuestion {
         optionContent: string;
     }[];
     correctOption: string;
-    points: number
+    points: number;
+    explanation: string | null;
 }
 
 export type QuizState = {

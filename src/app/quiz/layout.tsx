@@ -26,15 +26,16 @@ const QuizPageLayout = ({ children }: { children: ReactNode }) => {
                         <main className="grid grid-rows-[auto_1fr]">
                             <header data-name="quiz-header" className="bg-sidebar flex gap-2 items-center py-2.5 px-4 border-b sticky top-0">
                                 <SidebarTrigger />
-                                {/* <div>
-                                    <QuizTimer />
-                                </div> */}
                                 <div>
-                                    <QuizSubmitButton>
+                                    <QuizTimer />
+                                </div>
+                                <div>
+                                    {/* <QuizSubmitButton>
                                         <Button size={'sm'}>
                                             submit
                                         </Button>
-                                    </QuizSubmitButton>
+                                    </QuizSubmitButton> */}
+                                    <QuizQuitButton />
                                 </div>
                             </header>
                             <div>

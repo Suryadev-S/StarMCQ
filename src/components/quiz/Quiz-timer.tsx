@@ -56,7 +56,9 @@ const QuizTimer = () => {
     }
     return (
         <>
-            {test && <Timer rem_Time={test.meta.durationInSeconds} onTimeOut={handleTimeOut} />}
+            {test &&
+                (test.meta.mode == 'competitive' || test.meta.mode == 'exam') &&
+                <Timer rem_Time={test.meta.durationInSeconds} onTimeOut={handleTimeOut} />}
         </>
     )
 }

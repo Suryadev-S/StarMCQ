@@ -3,7 +3,7 @@ import { ITest } from "../types/quiz";
 const testSchema: ITest = {
     id: 'quiz123',
     meta: {
-        mode: 'exam',
+        mode: 'playground',
         title: 'Come lets test your knowledge',
         durationInSeconds: 80,
         totalQuestions: 10,
@@ -21,6 +21,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o3",
             points: 10,
+            explanation: "Paris is the capital and most populous city of France, known as the 'City of Light'."
         },
         {
             questionId: "q2",
@@ -33,6 +34,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o4",
             points: 10,
+            explanation: "JavaScript is the standard scripting language for web browsers, allowing interactive web pages."
         },
         {
             questionId: "q3",
@@ -45,6 +47,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o2",
             points: 10,
+            explanation: "Albert Einstein developed the theory of relativity, which revolutionized our understanding of space and time."
         },
         {
             questionId: "q4",
@@ -57,6 +60,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o4",
             points: 10,
+            explanation: "The Pacific Ocean is the largest, covering more area than all landmasses combined."
         },
         {
             questionId: "q5",
@@ -69,6 +73,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o2",
             points: 10,
+            explanation: "Mars is called the Red Planet due to the iron oxide (rust) on its surface, which gives it a reddish appearance."
         },
         {
             questionId: "q6",
@@ -81,6 +86,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o1",
             points: 10,
+            explanation: "HTML stands for HyperText Markup Language, the standard language for creating web pages."
         },
         {
             questionId: "q7",
@@ -93,6 +99,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o2",
             points: 10,
+            explanation: "Japan is called the 'Land of the Rising Sun' because it lies to the east of Asia, where the sun rises."
         },
         {
             questionId: "q8",
@@ -105,6 +112,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o2",
             points: 10,
+            explanation: "Plants absorb carbon dioxide from the air and use it along with sunlight to produce energy in photosynthesis."
         },
         {
             questionId: "q9",
@@ -117,6 +125,7 @@ const testSchema: ITest = {
             ],
             correctOption: "o2",
             points: 10,
+            explanation: "Python is widely used in data science due to its simplicity and powerful libraries like NumPy, Pandas, and scikit-learn."
         },
         {
             questionId: "q10",
@@ -129,8 +138,10 @@ const testSchema: ITest = {
             ],
             correctOption: "o3",
             points: 10,
+            explanation: "The smallest prime number is 2, as it is only divisible by 1 and itself."
         },
     ]
 }
+
 
 export default testSchema;

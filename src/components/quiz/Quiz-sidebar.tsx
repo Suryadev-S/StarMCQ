@@ -22,7 +22,7 @@ const QuizSidebar = () => {
     }
     return (
         <Sidebar collapsible={'icon'}>
-            <SidebarHeader className="border-b">
+            <SidebarHeader className="border-b h-12">
                 <SidebarMenu>
                     <SidebarMenuItem>
                         <SidebarMenuButton>

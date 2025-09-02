@@ -31,7 +31,7 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
     return (
         <div className="flex justify-around items-center h-full">
             {
-                (mode == "competitive" && isFinished) &&
+                (mode == "competitive" && isFinished) || (mode == 'exam') &&
                 <div>
                     <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('prev'))}>
                         <ArrowLeftIcon />
@@ -51,8 +51,10 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
                     (mode == 'playground' || (mode == 'competitive' && isFinished)) &&
                     (a_question.explanation ?
                         (
-                            <QuizExplanationElement content={a_question.explanation}>
-                                <Button className="mb-4" disabled={selectedOptions[a_question.questionId as string] ? true : false}>view explanation</Button>
+                            <QuizExplanationElement
+                                content={a_question.explanation}>
+                                {/* for playground mode, keep disabled until user selects an option and then make available to view */}
+                                <Button className="mb-4" disabled={selectedOptions[a_question.questionId as string] ? false : true}>view explanation</Button>
                             </QuizExplanationElement>
                         ) :
                         (
@@ -97,7 +99,7 @@ const ActiveQuestionComponent = ({ a_question, mode }: { a_question: IQuestion, 
             }
 
             {
-                (mode == "competitive" && isFinished) &&
+                (mode == "competitive" && isFinished) || (mode == 'exam') &&
                 <div>
                     <Button size={'icon'} onClick={() => dispatch(setActiveQuestionIndex('next'))}>
                         <ArrowRightIcon />

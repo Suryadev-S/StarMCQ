@@ -7,7 +7,7 @@ import axios from 'axios';
 import { useRouter } from "next/navigation";
 
 const QuizSubmitButton = ({ children }: { children: ReactNode }) => {
-    const { selectedOptions } = useSelector((state: RootState) => state.quizReducer);
+    const { selectedOptions, test } = useSelector((state: RootState) => state.quizReducer);
     const router = useRouter();
     const handleSubmit = async () => {
         try {
@@ -21,6 +21,10 @@ const QuizSubmitButton = ({ children }: { children: ReactNode }) => {
             console.error('There was an error in sending or in exam api')
             console.error(error);
         }
+    }
+    // only show submit button for exam mode
+    if (test == null || test.meta.mode != 'exam') {
+        return null
     }
     return (
         <AlertDialog>
